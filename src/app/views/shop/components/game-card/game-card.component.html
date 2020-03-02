@@ -1,0 +1,25 @@
+<div class="game card" [ngClass]="{isFound: steamService.searchByTitle(game)}">
+    <div class="left">
+      <img class="icon"
+             src="https://cloclo10.cloud.mail.ru/inline/1.png?etag=79B59883DB81A848CB81A5EC295EC813ACC8C367&x-email=yermakov.alex%40mail.ru"
+             alt="game-icon"
+      >
+      <button class="btn" [routerLink]="['/shop', 'buy-form', game.id]">Купить</button>
+        <!-- Если игра куплена, то показывать значок, что игра куплена, вместо кнопки купить -->
+    </div>
+
+    <div class="right">
+        <p class="header" [routerLink]="['/game', game.id]">
+            {{game.title}}
+            <span class="zvezda" *ngIf="game.rating >= 0.5">★</span>
+            <span class="zvezda" *ngIf="game.rating >= 1.5">★</span>
+            <span class="zvezda" *ngIf="game.rating >= 2.5">★</span>
+            <span class="zvezda" *ngIf="game.rating >= 3.5">★</span>
+            <span class="zvezda" *ngIf="game.rating >= 4.5">★</span>
+        </p>
+        <p>Жанр: {{game.genre}}</p>
+        <p>Цена: {{game.price | currency:'symbol':'₽' : '.0'}}
+          <span class="newPrice" *ngIf="hasDiscount">{{steamService.newPrice | currency:'symbol':'₽' : '.0'}}</span></p>
+        <p class="desc">Описание: {{game.description.substr(0, 100).concat("...")}}</p>
+    </div>
+</div>

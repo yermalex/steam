@@ -1,0 +1,149 @@
+<div class="popup">
+  <div class="popup-form">
+    <div (click)="steamService.goBack()" class="close">&times;</div>
+    <h2>Покупка игры</h2>
+    <hr>
+    <h3>Введите данные карты</h3>
+    <form novalidate
+          [formGroup]="buyForm"
+          (ngSubmit)="buyGame()"
+    >
+      <div formGroupName="fullName">
+        <div class="form-control">
+          <input id="surname" type="text" placeholder="Фамилия.."
+                 formControlName="surname"
+                 class="form-control__input"
+                 [class.restricted-full-name]="buyForm.get('fullName').errors && buyForm.get('fullName').errors.restrictedFullName">
+          <div *ngIf="buyForm.get('fullName').get('surname').invalid && buyForm.get('fullName').get('surname').touched"
+               class="validation">
+            <small *ngIf="buyForm.get('fullName').get('surname').errors.required">
+              Поле 'Фамилия' обязательно для заполнения!
+            </small>
+            <small *ngIf="buyForm.get('fullName').get('surname').errors.pattern">
+              Фамилия должна состоять только из заглавных латинских букв!
+            </small>
+          </div>
+        </div>
+
+        <div class="form-control">
+          <input id="name" type="text" placeholder="Имя.."
+                 formControlName="name"
+                 class="form-control__input"
+                 [class.restricted-full-name]="buyForm.get('fullName').errors && buyForm.get('fullName').errors.restrictedFullName">
+          <div *ngIf="buyForm.get('fullName').get('name').invalid && buyForm.get('fullName').get('name').touched"
+               class="validation">
+            <small *ngIf="buyForm.get('fullName').get('name').errors.required">
+              Поле 'Имя' обязательно для заполнения!
+            </small>
+            <small *ngIf="buyForm.get('fullName').get('name').errors.pattern">
+              Имя должно состоять только из заглавных латинских букв!
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="buyForm.get('fullName').invalid && buyForm.get('fullName').touched"
+           class="validation">
+        <small *ngIf="buyForm.get('fullName').errors && buyForm.get('fullName').errors.restrictedFullName">
+          Имя не должно совпадать с фамилией!
+        </small>
+      </div>
+
+      <div class="form-control">
+        <input id="cardNumber" type="text" placeholder="Номер карты.."
+               formControlName="cardNumber"
+               class="form-control__input"
+        >
+        <div *ngIf="buyForm.get('cardNumber').invalid && buyForm.get('cardNumber').touched"
+             class="validation">
+          <small *ngIf="buyForm.get('cardNumber').errors.required">
+            Поле 'Номер карты' обязательно для заполнения!
+          </small>
+          <small *ngIf="buyForm.get('cardNumber').errors.pattern">
+            Номер должен состоять только из 16 цифр!
+          </small>
+        </div>
+      </div>
+
+      <div class="form-control">
+        <input id="securityCode" type="text" placeholder="Код безопасности.."
+               formControlName="securityCode"
+               class="form-control__input"
+        >
+        <div *ngIf="buyForm.get('securityCode').invalid && buyForm.get('securityCode').touched"
+             class="validation">
+          <small *ngIf="buyForm.get('securityCode').errors.required">
+            Поле 'Код безопасности' обязательно для заполнения!
+          </small>
+          <small *ngIf="buyForm.get('securityCode').errors.pattern">
+            Код должен состоять только из 3 цифр!
+          </small>
+        </div>
+      </div>
+
+      <h3>Срок действия карты</h3>
+
+      <div class="form-control">
+        <label for="cardExpirationMonth">Месяц</label>
+        <select id="cardExpirationMonth"
+                formControlName="cardExpirationMonth"
+                class="form-control__input"
+        >
+          <option value="1">01</option>
+          <option value="2">02</option>
+          <option value="3">03</option>
+          <option value="4">04</option>
+          <option value="5">05</option>
+          <option value="6">06</option>
+          <option value="7">07</option>
+          <option value="8">08</option>
+          <option value="9">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+        <div *ngIf="buyForm.get('cardExpirationMonth').invalid && buyForm.get('cardExpirationMonth').touched"
+             class="validation">
+          <small *ngIf="buyForm.get('cardExpirationMonth').errors.required">
+            Поле 'Месяц' обязательно для заполнения!
+          </small>
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label for="cardExpirationYear">Год</label>
+        <select id="cardExpirationYear"
+                formControlName="cardExpirationYear"
+                class="form-control__input"
+        >
+          <option value="2020">2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+        </select>
+        <div *ngIf="buyForm.get('cardExpirationYear').invalid && buyForm.get('cardExpirationYear').touched"
+             class="validation">
+          <small *ngIf="buyForm.get('cardExpirationYear').errors.required">
+            Поле 'Год' обязательно для заполнения!
+          </small>
+        </div>
+      </div>
+
+
+      <button
+        class="popup-form__button" type="submit"
+        [ngClass]="{'no-valid-btn' : buyForm.invalid}">
+        Купить
+      </button>
+      <button class="popup-form__button popup-form__button-cancel" type="button" (click)="resetForm()">
+        Очистить
+      </button>
+    </form>
+  </div>
+</div>
