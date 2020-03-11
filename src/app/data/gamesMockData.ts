@@ -19,7 +19,8 @@ export const gamesMockData: IGame[] = [
       ' события которого разворачиваются в постапокалиптическом мире. https://kanobu.ru/games/metro-exodus/',
     genre: [genreEnum.Action, genreEnum.Indi],
     rating: 3.7,
-    price: 1000
+    price: 1000,
+    isInstall: false
   },
   {
     id: '2',
@@ -28,7 +29,8 @@ export const gamesMockData: IGame[] = [
       'https://kanobu.ru/games/the-elder-scrolls-online/',
     genre: [genreEnum.RPG],
     rating: 2,
-    price: 2000
+    price: 2000,
+    isInstall: false
   },
   {
     id: '3',
@@ -37,6 +39,7 @@ export const gamesMockData: IGame[] = [
       'https://kanobu.ru/games/the-elder-scrolls-online/',
     genre: [genreEnum.Action],
     rating: 5,
-    price: 500
+    price: 500,
+    isInstall: false
   }
 ];

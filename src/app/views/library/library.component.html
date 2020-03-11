@@ -1,1 +1,29 @@
-<p>library works!</p>
+<!--<app-downloading *ngIf="steamService.loading"></app-downloading>-->
+<div class="filtration">
+  <label class="filtration__text" for="filtration">ФИЛЬТРАЦИЯ</label>
+  <select class="filtration__input" id="filtration" size="1" [(ngModel)]="steamService.genreForLibFilter" (ngModelChange)="steamService.filterByLibGenre()"
+          [routerLink]="['/library']" [queryParams]="{filtrationBy: steamService.genreForLibFilter}"
+  >
+    <option selected>Жанр</option>
+    <option value="{{item.value}}" *ngFor="let item  of genre | keyvalue;">{{item.value}}</option>
+  </select>
+</div>
+
+<div class="search">
+  <label class="search__text" for="search">ПОИСК</label>
+  <input class="search__input" id="search" type="text" placeholder="по названию" [(ngModel)]="steamService.titleForLibSearch"
+         [routerLink]="['/library']" [queryParams]="{searchBy: steamService.titleForLibSearch}"
+  >
+</div>
+
+<div class="games" *ngIf="steamService.currUserGames.length; else notFoundMess;">
+  <ng-container *ngFor="let game of steamService.currUserGames">
+    <app-game-card [game]="game"
+                   [hasDiscount]="game.id === steamService.gameIdWithDiscount"
+                   [routerLink]="['/game', game.id]"
+    >
+    </app-game-card>
+  </ng-container>
+</div>
+
+<ng-template #notFoundMess> Не найдено!</ng-template>

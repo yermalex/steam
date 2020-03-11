@@ -14,9 +14,4 @@ export class AppComponent {
               private router: Router) {
   }
 
-  logout(event: Event) {
-    event.preventDefault();
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
 }

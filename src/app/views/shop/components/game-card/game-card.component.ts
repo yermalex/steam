@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IGame} from '../../../../interfaces/game';
 import {SteamService} from '../../../../services/steam.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
     selector: 'app-game-card',
@@ -13,16 +14,15 @@ export class GameCardComponent implements OnInit {
 
     @Input() hasDiscount: boolean;
 
-    constructor(private steamService: SteamService) {
+    constructor(private steamService: SteamService,
+                private  route: ActivatedRoute,
+                private router: Router) {
     }
 
     ngOnInit() {
-
-      if (this.hasDiscount && this.steamService.discountFlag) {
-        this.steamService.newPrice = this.game.price;
-        this.game.price = Math.floor(this.game.price * (1 - this.steamService.getRandom(1, 10) / 100));
-        this.steamService.discountFlag = false;
-      }
     }
 
+    func(e: Event) {
+      e.stopPropagation();
+    }
 }

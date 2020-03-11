@@ -7,6 +7,7 @@ export interface IGame {
   genre: Array<genreEnum>;
   rating: number;
   price: number;
+  isInstall: boolean;
 }
 
 

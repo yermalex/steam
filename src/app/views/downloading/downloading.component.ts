@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {SteamService} from '../../services/steam.service';
 
 @Component({
   selector: 'app-downloading',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DownloadingComponent implements OnInit {
 
-  constructor() { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
   }

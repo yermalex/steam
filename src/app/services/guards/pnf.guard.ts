@@ -1,11 +1,12 @@
-import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Params, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, Params, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {SteamService} from '../steam.service';
+import {IGame} from '../../interfaces/game';
 
 @Injectable({providedIn: 'root'})
-export class AuthGuard implements CanActivate, CanActivateChild {
+export class PageNotFound implements CanActivate, CanActivateChild {
 
   constructor(private authService: AuthService,
               private steamService: SteamService,
@@ -16,15 +17,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.steamService.isAuthenticated()) {
+    if (!!this.steamService.getGameByID(route.params.id)) {
       return true;
     } else {
-      this.authService.logout();
-      this.router.navigate(['/login'], {
-        queryParams: {
-          loginAgain: true
-        }
-      });
+      this.router.navigate(['/error']);
     }
   }
 

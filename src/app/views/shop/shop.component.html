@@ -2,8 +2,8 @@
 
 <div class="filtration">
   <label class="filtration__text" for="filtration">ФИЛЬТРАЦИЯ</label>
-    <select class="filtration__input" id="filtration" size="1" [(ngModel)]="steamService.genreForFilter" (ngModelChange)="steamService.filterByGenre()"
-            [routerLink]="['/shop']" [queryParams]="{filtrationBy: steamService.genreForFilter}"
+    <select class="filtration__input" id="filtration" size="1" [(ngModel)]="steamService.genreForShopFilter" (ngModelChange)="steamService.filterByShopGenre()"
+            [routerLink]="['/shop']" [queryParams]="{filtrationBy: steamService.genreForShopFilter}"
     >
         <option selected>Жанр</option>
         <option value="{{item.value}}" *ngFor="let item  of genre | keyvalue;">{{item.value}}</option>
@@ -12,15 +12,19 @@
 
 <div class="search">
     <label class="search__text" for="search">ПОИСК</label>
-    <input class="search__input" id="search" type="text" placeholder="по названию" [(ngModel)]="steamService.titleForSearch"
-           [routerLink]="['/shop']" [queryParams]="{searchBy: steamService.titleForSearch}"
+    <input class="search__input" id="search" type="text" placeholder="по названию" [(ngModel)]="steamService.titleForShopSearch"
+           [routerLink]="['/shop']" [queryParams]="{searchBy: steamService.titleForShopSearch}"
     >
 </div>
 
 
-<div class="games" *ngIf="steamService.games.length !== 0; else notFoundMess;">
+<div class="games" *ngIf="steamService.games.length; else notFoundMess;">
     <ng-container *ngFor="let game of steamService.games">
-        <app-game-card [game]="game" [hasDiscount]="+game.id === steamService.gameIdWithDiscount"></app-game-card>
+        <app-game-card [game]="game"
+                       [hasDiscount]="game.id === steamService.gameIdWithDiscount"
+                       [routerLink]="['/game', game.id]"
+        >
+        </app-game-card>
     </ng-container>
 </div>
 

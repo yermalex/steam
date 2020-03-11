@@ -1,5 +1,8 @@
-<form class="card" [formGroup]="form" (ngSubmit)="submit()">
-  <h2>Авторизация</h2>
+<form class="card wrapper" [formGroup]="singInForm" (ngSubmit)="singInSubmit()"
+      *ngIf="isSingIn"
+>
+  <h2 class="singIn" [class.isActive]="isSingIn">Авторизация</h2>
+  <h2 (click)="isSingIn = !isSingIn" class="singUp">Регистрация</h2>
 
   <div class="alert alert-danger" *ngIf="auth.error$ | async as error">
     {{error}}
@@ -10,26 +13,77 @@
   </div>
 
   <div class="form-control"
-       [ngClass]="{invalid: form.get('email').touched && form.get('email').invalid}">
-    <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email">
+       [ngClass]="{invalid: singInForm.get('singInEmail').touched && singInForm.get('singInEmail').invalid}">
+    <label for="singInEmail">Эмаил:</label>
+    <input id="singInEmail" type="email" formControlName="singInEmail">
     <div class="validation"
-    *ngIf="form.get('email').touched && form.get('email').invalid">
-      <small *ngIf="form.get('email').errors.required">Поле обязательно для заполнения</small>
-      <small *ngIf="form.get('email').errors.email">Email задан некорректно</small>
+    *ngIf="singInForm.get('singInEmail').touched && singInForm.get('singInEmail').invalid">
+      <small *ngIf="singInForm.get('singInEmail').errors.required">Поле обязательно для заполнения</small>
+      <small *ngIf="singInForm.get('singInEmail').errors.email">Email задан некорректно</small>
     </div>
   </div>
 
   <div class="form-control"
-       [ngClass]="{invalid: form.get('password').touched && form.get('password').invalid}">
-    <label for="password">Пароль:</label>
-    <input id="password" type="password" formControlName="password">
+       [ngClass]="{invalid: singInForm.get('singInPassword').touched && singInForm.get('singInPassword').invalid}">
+    <label for="singInPassword">Пароль:</label>
+    <input id="singInPassword" type="password" formControlName="singInPassword">
     <div class="validation"
-    *ngIf="form.get('password').touched && form.get('password').invalid">
-      <small *ngIf="form.get('password').errors.required">Поле обязательно для заполнения</small>
-      <small *ngIf="form.get('password').errors.minlength">Пароль должен быть не менее {{form.get('password').errors.minlength.requiredLength}} символов</small>
+    *ngIf="singInForm.get('singInPassword').touched && singInForm.get('singInPassword').invalid">
+      <small *ngIf="singInForm.get('singInPassword').errors.required">Поле обязательно для заполнения</small>
+      <small *ngIf="singInForm.get('singInPassword').errors.minlength">Пароль должен быть не менее {{singInForm.get('singInPassword').errors.minlength.requiredLength}} символов</small>
     </div>
   </div>
 
-  <button type="submit" class="btn" [disabled]="form.invalid || submitted">Войти</button>
+  <button type="submit" class="btn" [disabled]="singInForm.invalid || submitted">Войти</button>
+</form>
+
+
+<form class="card wrapper" [formGroup]="singUpForm" (ngSubmit)="singUpSubmit()"
+      *ngIf="!isSingIn"
+>
+  <h2 class="singUp" [class.isActive]="!isSingIn">Регистрация</h2>
+  <h2 (click)="isSingIn = !isSingIn" class="singIn">Авторизация</h2>
+
+  <div class="alert alert-danger" *ngIf="auth.error$ | async as error">
+    {{error}}
+  </div>
+
+  <div class="alert alert-info" *ngIf="message">
+    {{message}}
+  </div>
+
+  <div class="form-control"
+       [ngClass]="{invalid: singUpForm.get('singUpNickname').touched && singUpForm.get('singUpNickname').invalid}">
+    <label for="singUpNickname">Никнэйм:</label>
+    <input id="singUpNickname" type="text" formControlName="singUpNickname">
+    <div class="validation"
+         *ngIf="singUpForm.get('singUpNickname').touched && singUpForm.get('singUpNickname').invalid">
+      <small *ngIf="singUpForm.get('singUpNickname').errors.required">Поле обязательно для заполнения</small>
+      <small *ngIf="singUpForm.get('singUpNickname').errors.pattern">Никнэйм может состоять только из латинских букв, цифр!</small>
+    </div>
+  </div>
+
+  <div class="form-control"
+       [ngClass]="{invalid: singUpForm.get('singUpEmail').touched && singUpForm.get('singUpEmail').invalid}">
+    <label for="singUpEmail">Эмаил:</label>
+    <input id="singUpEmail" type="email" formControlName="singUpEmail">
+    <div class="validation"
+         *ngIf="singUpForm.get('singUpEmail').touched && singUpForm.get('singUpEmail').invalid">
+      <small *ngIf="singUpForm.get('singUpEmail').errors.required">Поле обязательно для заполнения</small>
+      <small *ngIf="singUpForm.get('singUpEmail').errors.email">Email задан некорректно</small>
+    </div>
+  </div>
+
+  <div class="form-control"
+       [ngClass]="{invalid: singUpForm.get('singUpPassword').touched && singUpForm.get('singUpPassword').invalid}">
+    <label for="singUpPassword">Пароль:</label>
+    <input id="singUpPassword" type="password" formControlName="singUpPassword">
+    <div class="validation"
+         *ngIf="singUpForm.get('singUpPassword').touched && singUpForm.get('singUpPassword').invalid">
+      <small *ngIf="singUpForm.get('singUpPassword').errors.required">Поле обязательно для заполнения</small>
+      <small *ngIf="singUpForm.get('singUpPassword').errors.minlength">Пароль должен быть не менее {{singUpForm.get('singUpPassword').errors.minlength.requiredLength}} символов</small>
+    </div>
+  </div>
+
+  <button type="submit" class="btn" [disabled]="singUpForm.invalid || submitted">Зарегистрироваться</button>
 </form>

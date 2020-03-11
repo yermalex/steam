@@ -3,6 +3,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {IUser} from '../../interfaces/user';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
+import {SteamService} from '../../services/steam.service';
+import {genreEnum} from '../../data/gamesMockData';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +13,15 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup;
+  isSingIn = true;
+
+  singInForm: FormGroup;
+  singUpForm: FormGroup;
   submitted = false;
   message: string;
 
   constructor(public auth: AuthService,
+              private steamService: SteamService,
               private router: Router,
               private route: ActivatedRoute
   ) { }
@@ -27,29 +33,53 @@ export class LoginComponent implements OnInit {
       }
     });
 
-    this.form = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+    this.singInForm = new FormGroup({
+      singInEmail: new FormControl(null, [Validators.required, Validators.email]),
+      singInPassword: new FormControl(null, [Validators.required, Validators.minLength(6)])
+    });
+
+    this.singUpForm = new FormGroup({
+      singUpNickname: new FormControl(null, [Validators.required, Validators.pattern('^([A-Z,a-z,0-9]{1,})$')]),
+      singUpEmail: new FormControl(null, [Validators.required, Validators.email]),
+      singUpPassword: new FormControl(null, [Validators.required, Validators.minLength(6)])
     });
   }
 
-  submit() {
-    if (this.form.invalid) {
+  singInSubmit() {
+    if (this.singInForm.invalid) {
       return;
     }
     this.submitted = true;
 
     const user: IUser = {
-      email: this.form.value.email,
-      password: this.form.value.password
+      email: this.singInForm.value.singInEmail,
+      password: this.singInForm.value.singInPassword
     };
 
-    this.auth.login(user).subscribe(() => {
-      this.form.reset();
-      this.router.navigate(['/library']);
-      this.submitted = false;
-    }, () => {
-      this.submitted = false;
-    });
+    this.steamService.login(user);
+    this.singInForm.reset();
+    this.router.navigate(['/library']);
+    this.submitted = false;
   }
+
+  singUpSubmit() {
+    if (this.singUpForm.invalid) {
+      return;
+    }
+    this.submitted = true;
+
+    const newUser: IUser = {
+      id: this.steamService.getNextID(),
+      nickname: this.singUpForm.value.singUpNickname,
+      email: this.singUpForm.value.singUpEmail,
+      password: this.singUpForm.value.singUpPassword,
+      purchasedGames: []
+    };
+    this.steamService.registerNewUser(newUser);
+    this.steamService.login(newUser);
+    this.singUpForm.reset();
+    this.router.navigate(['/library']);
+    this.submitted = false;
+  }
+
 }

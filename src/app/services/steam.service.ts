@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {IGame} from '../interfaces/game';
-import {FbCreateResponse} from '../interfaces/user';
+import {FbCreateResponse, IUser} from '../interfaces/user';
 import {gamesMockData} from '../data/gamesMockData';
-import {ActivatedRoute} from '@angular/router';
+import {usersMockData} from '../data/usersMockData';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
@@ -14,32 +15,40 @@ import {map} from 'rxjs/operators';
 })
 export class SteamService {
 
-  genreForFilter = 'Жанр';
-  titleForSearch = '';
+  loading = false;
 
-  gameIdWithDiscount = this.getRandom();
-  newPrice: number;
-  discountFlag = true;
+  genreForShopFilter = 'Жанр';
+  genreForLibFilter = 'Жанр';
+  titleForShopSearch = '';
+  titleForLibSearch = '';
 
   games = this.getGamesMockData();
+  currUserGames = null;
+
+  userIsAuthorized = false;
+  currUser: IUser = null;
+
+  gameIdWithDiscount = this.getRandom().toString();
+  newPrice: number = Math.floor(this.getGameByID(this.gameIdWithDiscount).price * (1 - this.getRandom(1, 10) / 100));
+
 
   constructor(private route: ActivatedRoute,
               private location: Location,
-              private http: HttpClient) {
+              private http: HttpClient,
+              private router: Router) {
   }
 
   goBack(): void {
     this.location.back();
   }
 
-  filterByGenre(): void {
-    if (this.genreForFilter === 'Жанр') {
-      this.games = this.getGamesMockData();
+  filterByLibGenre(): void {
+    if (this.currUser && this.genreForLibFilter === 'Жанр') {
+      this.currUserGames = this.getCurrentUsersGames();
     } else {
-      this.games = this.getGamesMockData().filter(game => {
-        // наверное, тут можно переписать получше, без цикла
+      this.currUserGames = this.getCurrentUsersGames().filter(game => {
         for (let i = 0; i < game.genre.length; i++) {
-          if (game.genre[i].toString() === this.genreForFilter.toString()) {
+          if (game.genre[i].toString() === this.genreForLibFilter.toString()) {
             return true;
           }
         }
@@ -47,11 +56,34 @@ export class SteamService {
     }
   }
 
-  searchByTitle(game: IGame): boolean {
-    if (!this.titleForSearch.trim()) {
+  filterByShopGenre(): void {
+    if (this.genreForShopFilter === 'Жанр') {
+      this.games = this.getGamesMockData();
+    } else {
+      this.games = this.getGamesMockData().filter(game => {
+        for (let i = 0; i < game.genre.length; i++) {
+          if (game.genre[i].toString() === this.genreForShopFilter.toString()) {
+            return true;
+          }
+        }
+      });
+    }
+  }
+
+  searchByShopTitle(game: IGame): boolean {
+    if (!this.titleForShopSearch.trim()) {
       return false;
     }
-    if (game.title.toLocaleLowerCase().includes(this.titleForSearch.toLowerCase())) {
+    if (this.titleForShopSearch.length >= 3 && game.title.toLocaleLowerCase().includes(this.titleForShopSearch.toLowerCase())) {
+      return true;
+    }
+  }
+
+  searchByLibTitle(game: IGame): boolean {
+    if (!this.titleForLibSearch.trim()) {
+      return false;
+    }
+    if (this.titleForLibSearch.length >= 3 && game.title.toLocaleLowerCase().includes(this.titleForLibSearch.toLowerCase())) {
       return true;
     }
   }
@@ -68,16 +100,64 @@ export class SteamService {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  create(game: IGame): Observable<IGame> {
-    return this.http.post(`${environment.fbDbUrl}/admin/games.json`, game)
-      .pipe(
-        map((response: FbCreateResponse) => {
-          return {
-            ...game,
-            id: response.name
-          };
-        })
-      );
+  addPurchasedGame(purchasedGame: IGame): void {
+    this.currUser.purchasedGames.push(purchasedGame);
+    console.log(usersMockData);
   }
 
+  gameAvailability(game: IGame): boolean {
+    if (this.currUser) {
+      for (let i = 0; i < this.currUser.purchasedGames.length; i++) {
+        if (this.currUser.purchasedGames[i].id === game.id) {
+          return true;
+        }
+      }
+    }
+
+  }
+
+  getCurrentUsersGames(): IGame[] {
+      return this.currUser.purchasedGames;
+  }
+
+  registerNewUser(newUser: IUser): void {
+    usersMockData.push(newUser);
+    console.log(usersMockData);
+  }
+
+  getNextID(): string {
+    return (+usersMockData[usersMockData.length - 1].id + 1).toString();
+  }
+
+  login(user: IUser): void {
+    for (let i = 0; i < usersMockData.length; i++) {
+      if (usersMockData[i].email === user.email && usersMockData[i].password === user.password) {
+        this.userIsAuthorized = true;
+        this.currUser = usersMockData[i];
+        console.log('вошлиииииииииии');
+        this.currUserGames = this.getCurrentUsersGames();
+        return;
+      }
+    }
+  }
+
+  logout(): void {
+    this.userIsAuthorized = false;
+    this.currUser = null;
+    console.log('вышлииии');
+    this.router.navigate(['/login']);
+  }
+
+  isAuthenticated(): boolean {
+    console.log('запросили аутентификацию есть??');
+    return this.userIsAuthorized;
+}
+
+  toggleInstallButton(game: IGame) {
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+      this.getGameByID(game.id).isInstall = !this.getGameByID(game.id).isInstall;
+    }, 5000);
+  }
 }

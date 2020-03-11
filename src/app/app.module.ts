@@ -10,7 +10,7 @@ import { GameComponent } from './views/game/game.component';
 import { DownloadingComponent } from './views/downloading/downloading.component';
 import { BuyFormComponent } from './views/buy-form/buy-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { ErrorPageComponent } from './views/error-page/error-page.component';
 import { HomeComponent } from './views/home/home.component';
 import {HttpClientModule} from '@angular/common/http';
 import {GameCardComponent} from './views/shop/components/game-card/game-card.component';

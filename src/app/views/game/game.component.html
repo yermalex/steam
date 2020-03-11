@@ -1,23 +1,45 @@
 <router-outlet></router-outlet> <!--форма покупки -->
+
+<!--<app-downloading *ngIf="steamService.loading"></app-downloading>-->
+
 <div class="game">
   <div class="left">
     <img class="icon" src="https://cloclo10.cloud.mail.ru/inline/1.png?etag=79B59883DB81A848CB81A5EC295EC813ACC8C367&x-email=yermakov.alex%40mail.ru"
-              alt="game-icon"
+         alt="game-icon"
     >
-    <button class="btn" [routerLink]="['/game', game.id, 'buy-form', game.id]">Купить</button>
-    <button class="btn" (click)="steamService.goBack()">Назад</button>
-<!--    <button class="btn" [routerLink]="['/game', game.id, 'buy-form']">Купить</button>
-Есть кнопка купить, которая покаазывается, если игра не куплена. Через нгиф.
-Есть кнопка установить, которая показывается, если игра куплена.
-У нее 2 положения и она тоглиться с установить на удалить и показывается модалка с имитацией процесса установки/удаления-->
+    <button class="btn" [routerLink]="['/game', game.id, 'buy-form', game.id]"
+            *ngIf="!steamService.gameAvailability(game)"
+    >
+      Купить
+    </button>
+    <button class="btn"
+            [ngClass]="{'gameAvailability' : steamService.gameAvailability(game)}"
+            *ngIf="steamService.gameAvailability(game) && this.route.snapshot.url[0].path === 'shop'"
+    >
+      ✔
+    </button>
+    <button class="btn"
+            *ngIf="steamService.gameAvailability(game) && (this.route.snapshot.url[0].path === 'library' || this.route.snapshot.url[0].path === 'game')"
+    >
+      <span (click)="steamService.toggleInstallButton(game)">{{game.isInstall?"Удалить":"Установить"}}</span>
+    </button>
+
   </div>
 
   <div class="right">
     <p class="header">{{game.title}} {{game.rating}}*</p>
     <p>Жанр: {{game.genre}}</p>
-    <p>Цена: {{game.price}}</p>
+    <p>Цена:
+      <span [ngClass]="{'oldPrice' : this.game.id === steamService.gameIdWithDiscount}">
+        {{game.price | currency:'symbol':'₽' : '.0'}}
+      </span>
+      <span *ngIf="this.game.id === steamService.gameIdWithDiscount">
+        {{steamService.newPrice | currency:'symbol':'₽' : '.0'}}
+      </span>
+    </p>
     <p class="desc">Описание: {{game.description}}</p>
   </div>
 
-
 </div>
+
+<button class="btn" (click)="steamService.goBack()">Назад</button>

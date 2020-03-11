@@ -45,13 +45,9 @@ export class BuyFormComponent implements OnInit {
       this.route.params.subscribe((params: Params) => {
         this.game = this.steamService.getGameByID(params.id);
       });
-      // this.db.list('items').push(this.game);
-      this.steamService.create(this.game).subscribe(() => {
-        this.buyForm.reset();
-      });
-      // TODO
-      // текущему пользователю нужно в массив купленных игр запушить данную игру
-      // и в текущую игру запушить ид этого пользователя (для доп функционала)
+
+      this.steamService.addPurchasedGame(this.game);
+
       this.steamService.goBack();
     }
   }

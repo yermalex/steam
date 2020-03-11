@@ -20,17 +20,15 @@ export class ShopComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // TODO
-    // при переходе на шоп в навбаре фильтрация и сорт сохраняется,
-    // но нужно чтоб отображались кверипараметры
-    // сделать чтоб квери параметры работали вместе, а не отдельно
+    this.steamService.titleForLibSearch = '';
+
     this.route.queryParams.subscribe((params: Params) => {
       if (params.filtrationBy) {
-        this.steamService.genreForFilter = params.filtrationBy;
-        this.steamService.filterByGenre();
+        this.steamService.genreForShopFilter = params.filtrationBy;
+        this.steamService.filterByShopGenre();
       }
       if (params.searchBy) {
-        this.steamService.titleForSearch = params.searchBy;
+        this.steamService.titleForShopSearch = params.searchBy;
       }
     });
   }

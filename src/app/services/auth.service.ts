@@ -22,6 +22,16 @@ export class AuthService {
     return localStorage.getItem('fb-token');
   }
 
+  private setToken(response: FbAuthResponse | null) {
+    if (response) {
+      const expDate = new Date( new Date().getTime() + +response.expiresIn * 1000);
+      localStorage.setItem('fb-token', response.idToken);
+      localStorage.setItem('fb-token-exp', expDate.toString());
+    } else {
+      localStorage.clear();
+    }
+  }
+
   login(user: IUser): Observable<any> {
     user.returnSecureToken = true;
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`, user)
@@ -41,7 +51,6 @@ export class AuthService {
 
   private handleError(error: HttpErrorResponse) {
     const {message} = error.error.error;
-
     switch (message) {
       case 'INVALID_EMAIL':
         this.error$.next('Неверный email');
@@ -57,13 +66,5 @@ export class AuthService {
     return throwError(error);
   }
 
-  private setToken(response: FbAuthResponse | null) {
-    if (response) {
-      const expDate = new Date( new Date().getTime() + +response.expiresIn * 1000);
-      localStorage.setItem('fb-token', response.idToken);
-      localStorage.setItem('fb-token-exp', expDate.toString());
-    } else {
-      localStorage.clear();
-    }
-  }
+
 }
