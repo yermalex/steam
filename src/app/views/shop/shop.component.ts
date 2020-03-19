@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SteamService} from '../../services/steam.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {IGame} from '../../interfaces/game';
+import {IGame} from '../../store/models/game';
 import {genreEnum} from '../../data/gamesMockData';
 import {of} from 'rxjs';
 

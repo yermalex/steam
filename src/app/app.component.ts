@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {SteamService} from './services/steam.service';
-import {AuthService} from './services/auth.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -10,8 +9,30 @@ import {Router} from '@angular/router';
 })
 export class AppComponent {
   constructor(private steamService: SteamService,
-              public auth: AuthService,
               private router: Router) {
   }
 
 }
+
+// import { Component, OnInit } from '@angular/core';
+// import { Store, select } from '@ngrx/store';
+//
+// import { AppState } from './store/state/app.state';
+// import { GetConfig } from './store/actions/config.actions';
+// import { selectConfig } from './store/selectors/config.selectors';
+//
+// @Component({
+//   selector: 'app-root',
+//   templateUrl: './app.component.html',
+//   styleUrls: ['./app.component.less']
+// })
+// export class AppComponent implements OnInit {
+//   title = 'angular-ngrx';
+//   config$ = this._store.pipe(select(selectConfig));
+//
+//   constructor(private _store: Store<AppState>) {}
+//
+//   ngOnInit() {
+//     this._store.dispatch(new GetConfig());
+//   }
+// }

@@ -1,6 +1,6 @@
 import {Injectable, OnInit} from '@angular/core';
-import {IGame} from '../interfaces/game';
-import {FbCreateResponse, IUser} from '../interfaces/user';
+import {IGame} from '../store/models/game';
+import {IUser} from '../store/models/user';
 import {gamesMockData} from '../data/gamesMockData';
 import {usersMockData} from '../data/usersMockData';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -96,7 +96,7 @@ export class SteamService {
     return this.games.find(g => g.id === id);
   }
 
-  getRandom(min: number = 1, max: number = gamesMockData.length): number {
+  getRandom(min: number = 1, max: number = this.getGamesMockData().length): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 

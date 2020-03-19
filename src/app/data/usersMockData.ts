@@ -1,5 +1,5 @@
-import {IUser} from '../interfaces/user';
-import {IGame} from '../interfaces/game';
+import {IUser} from '../store/models/user';
+import {IGame} from '../store/models/game';
 import {gamesMockData, genreEnum} from './gamesMockData';
 
 export const usersMockData: IUser[] = [
@@ -8,7 +8,6 @@ export const usersMockData: IUser[] = [
     nickname: 'alex',
     email: 'yermakov@ya.ru',
     password: '000000',
-    returnSecureToken: null,
     purchasedGames: [gamesMockData[0], gamesMockData[1]]
   },
   {
@@ -16,7 +15,6 @@ export const usersMockData: IUser[] = [
     nickname: 'ivan',
     email: 'ivan@mail.ru',
     password: '0000000',
-    returnSecureToken: null,
     purchasedGames: []
   }
 ];

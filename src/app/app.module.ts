@@ -1,6 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+
+
+import { UserService } from './services/user.service';
+import { UsersComponent as UsersContainerComponent } from './containers/users/users.component';
+import { UsersComponent } from './components/users/users.component';
+import { UserComponent } from './containers/user/user.component';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ShopComponent } from './views/shop/shop.component';
@@ -17,6 +26,13 @@ import {GameCardComponent} from './views/shop/components/game-card/game-card.com
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreModule } from '@ngrx/store';
+import {appReducer} from './store/reducers/app.reducer';
+import {UserEffects} from './store/effects/user.effects';
+import {ConfigEffects} from './store/effects/config.effects';
 
 @NgModule({
   declarations: [
@@ -29,18 +45,26 @@ import {AngularFireDatabaseModule} from '@angular/fire/database';
     BuyFormComponent,
     ErrorPageComponent,
     HomeComponent,
-    GameCardComponent
+    GameCardComponent,
+
+
+    UsersContainerComponent,
+    UsersComponent,
+    UserComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
-    // AngularFireModule.initializeApp(environment.firebaseConfig),
-    // AngularFireDatabaseModule
+    HttpClientModule,
+    EffectsModule.forRoot([UserEffects, ConfigEffects]),
+    StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
+    StoreModule.forRoot(appReducer),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

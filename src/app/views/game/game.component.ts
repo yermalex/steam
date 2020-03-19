@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {SteamService} from '../../services/steam.service';
-import {IGame} from '../../interfaces/game';
+import {IGame} from '../../store/models/game';
 
 @Component({
   selector: 'app-game',

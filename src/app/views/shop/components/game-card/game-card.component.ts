@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IGame} from '../../../../interfaces/game';
+import {IGame} from '../../../../store/models/game';
 import {SteamService} from '../../../../services/steam.service';
 import {ActivatedRoute, Router} from '@angular/router';
 

@@ -4,9 +4,6 @@
   <h2 class="singIn" [class.isActive]="isSingIn">Авторизация</h2>
   <h2 (click)="isSingIn = !isSingIn" class="singUp">Регистрация</h2>
 
-  <div class="alert alert-danger" *ngIf="auth.error$ | async as error">
-    {{error}}
-  </div>
 
   <div class="alert alert-info" *ngIf="message">
     {{message}}
@@ -44,9 +41,6 @@
   <h2 class="singUp" [class.isActive]="!isSingIn">Регистрация</h2>
   <h2 (click)="isSingIn = !isSingIn" class="singIn">Авторизация</h2>
 
-  <div class="alert alert-danger" *ngIf="auth.error$ | async as error">
-    {{error}}
-  </div>
 
   <div class="alert alert-info" *ngIf="message">
     {{message}}

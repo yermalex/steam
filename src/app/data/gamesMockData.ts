@@ -1,4 +1,4 @@
-import {IGame} from '../interfaces/game';
+import {IGame} from '../store/models/game';
 
 export enum genreEnum {
   Action = 'Экшен',

@@ -1,4 +1,4 @@
-import {genreEnum} from '../data/gamesMockData';
+import {genreEnum} from '../../data/gamesMockData';
 
 export interface IGame {
   id: string;

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {IUser} from '../../interfaces/user';
-import {AuthService} from '../../services/auth.service';
+import {IUser} from '../../store/models/user';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {SteamService} from '../../services/steam.service';
 import {genreEnum} from '../../data/gamesMockData';
@@ -20,8 +19,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
   message: string;
 
-  constructor(public auth: AuthService,
-              private steamService: SteamService,
+  constructor(private steamService: SteamService,
               private router: Router,
               private route: ActivatedRoute
   ) { }

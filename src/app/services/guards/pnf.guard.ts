@@ -1,15 +1,13 @@
 import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, Params, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Injectable, OnInit} from '@angular/core';
-import {AuthService} from '../auth.service';
 import {SteamService} from '../steam.service';
-import {IGame} from '../../interfaces/game';
+import {IGame} from '../../store/models/game';
 
 @Injectable({providedIn: 'root'})
 export class PageNotFound implements CanActivate, CanActivateChild {
 
-  constructor(private authService: AuthService,
-              private steamService: SteamService,
+  constructor(private steamService: SteamService,
               private router: Router) {
   }
 
