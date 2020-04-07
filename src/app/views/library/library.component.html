@@ -1,8 +1,8 @@
 <!--<app-downloading *ngIf="steamService.loading"></app-downloading>-->
 <div class="filtration">
   <label class="filtration__text" for="filtration">ФИЛЬТРАЦИЯ</label>
-  <select class="filtration__input" id="filtration" size="1" [(ngModel)]="steamService.genreForLibFilter" (ngModelChange)="steamService.filterByLibGenre()"
-          [routerLink]="['/library']" [queryParams]="{filtrationBy: steamService.genreForLibFilter}"
+  <select class="filtration__input" id="filtration" size="1" [(ngModel)]="genreForLibFilter" (ngModelChange)="filterByLibGenre()"
+          [routerLink]="['/library']" [queryParams]="{filtrationBy: genreForLibFilter}"
   >
     <option selected>Жанр</option>
     <option value="{{item.value}}" *ngFor="let item  of genre | keyvalue;">{{item.value}}</option>
@@ -16,14 +16,13 @@
   >
 </div>
 
-<div class="games" *ngIf="steamService.currUserGames.length; else notFoundMess;">
-  <ng-container *ngFor="let game of steamService.currUserGames">
+<div class="games" *ngIf="(games$ | async).length; else notFoundMess;">
+  <ng-container *ngFor="let game of games$ | async">
     <app-game-card [game]="game"
-                   [hasDiscount]="game.id === steamService.gameIdWithDiscount"
                    [routerLink]="['/game', game.id]"
     >
     </app-game-card>
   </ng-container>
 </div>
-
 <ng-template #notFoundMess> Не найдено!</ng-template>
+

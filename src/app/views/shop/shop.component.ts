@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {SteamService} from '../../services/steam.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {IGame} from '../../store/models/game';
-import {genreEnum} from '../../data/gamesMockData';
-import {of} from 'rxjs';
+import {genreEnum} from '../../store/models/game';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../store/state/app.state';
+import {selectGameList, selectGameListByGenre} from '../../store/selectors/game.selector';
 
 @Component({
   selector: 'app-shop',
@@ -12,11 +13,16 @@ import {of} from 'rxjs';
 })
 export class ShopComponent implements OnInit {
 
+  games$ = this.store.pipe(select(selectGameList));
+
+  genreForShopFilter = 'Жанр';
+
   readonly genre: typeof genreEnum = genreEnum;
 
   constructor(private steamService: SteamService,
-              private  route: ActivatedRoute,
-              private router: Router) {
+              private route: ActivatedRoute,
+              private router: Router,
+              private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
@@ -24,8 +30,8 @@ export class ShopComponent implements OnInit {
 
     this.route.queryParams.subscribe((params: Params) => {
       if (params.filtrationBy) {
-        this.steamService.genreForShopFilter = params.filtrationBy;
-        this.steamService.filterByShopGenre();
+        this.genreForShopFilter = params.filtrationBy;
+        this.filterByShopGenre();
       }
       if (params.searchBy) {
         this.steamService.titleForShopSearch = params.searchBy;
@@ -33,5 +39,13 @@ export class ShopComponent implements OnInit {
     });
   }
 
+
+  filterByShopGenre(): void {
+    if (this.genreForShopFilter === 'Жанр') {
+      this.games$ = this.store.pipe(select(selectGameList));
+    } else {
+      this.games$ = this.store.pipe(select(selectGameListByGenre, {gameGenre: this.genreForShopFilter}));
+    }
+  }
 
 }

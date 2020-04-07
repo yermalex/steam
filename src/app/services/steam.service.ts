@@ -1,14 +1,16 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {IGame} from '../store/models/game';
 import {IUser} from '../store/models/user';
-import {gamesMockData} from '../data/gamesMockData';
-import {usersMockData} from '../data/usersMockData';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../store/state/app.state';
+import {UserHttp} from '../store/models/http-models/user-http.interface';
+import {GameHttp} from '../store/models/http-models/game-http.interface';
+import {DelSelectedUser, GetUser, InstallGame} from '../store/actions/user.actions';
+import {selectSelectedUser, selectSelectedUserGameList, selectUserList} from '../store/selectors/user.selector';
 
 @Injectable({
   providedIn: 'root'
@@ -17,57 +19,21 @@ export class SteamService {
 
   loading = false;
 
-  genreForShopFilter = 'Жанр';
-  genreForLibFilter = 'Жанр';
   titleForShopSearch = '';
   titleForLibSearch = '';
 
-  games = this.getGamesMockData();
-  currUserGames = null;
-
-  userIsAuthorized = false;
-  currUser: IUser = null;
-
-  gameIdWithDiscount = this.getRandom().toString();
-  newPrice: number = Math.floor(this.getGameByID(this.gameIdWithDiscount).price * (1 - this.getRandom(1, 10) / 100));
-
+  usersUrl = `http://localhost:4200/assets/data/users.json`;
+  gamesUrl = `http://localhost:4200/assets/data/games.json`;
 
   constructor(private route: ActivatedRoute,
               private location: Location,
               private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private store: Store<AppState>) {
   }
 
   goBack(): void {
     this.location.back();
-  }
-
-  filterByLibGenre(): void {
-    if (this.currUser && this.genreForLibFilter === 'Жанр') {
-      this.currUserGames = this.getCurrentUsersGames();
-    } else {
-      this.currUserGames = this.getCurrentUsersGames().filter(game => {
-        for (let i = 0; i < game.genre.length; i++) {
-          if (game.genre[i].toString() === this.genreForLibFilter.toString()) {
-            return true;
-          }
-        }
-      });
-    }
-  }
-
-  filterByShopGenre(): void {
-    if (this.genreForShopFilter === 'Жанр') {
-      this.games = this.getGamesMockData();
-    } else {
-      this.games = this.getGamesMockData().filter(game => {
-        for (let i = 0; i < game.genre.length; i++) {
-          if (game.genre[i].toString() === this.genreForShopFilter.toString()) {
-            return true;
-          }
-        }
-      });
-    }
   }
 
   searchByShopTitle(game: IGame): boolean {
@@ -88,76 +54,51 @@ export class SteamService {
     }
   }
 
-  getGamesMockData(): IGame[] {
-    return gamesMockData;
+  gameAvailability(gameID: string): boolean {
+    let val = false;
+    this.store.pipe(select(selectSelectedUser)).subscribe(value => {
+      if (value) {
+        this.store.pipe(select(selectSelectedUserGameList)).subscribe((games) => {
+          games.forEach((selUserGame) => {
+            if (selUserGame.id === gameID) {
+              val = true;
+            }
+          });
+        });
+      } else { val = false; }
+    });
+    return val;
   }
-
-  getGameByID(id: string): IGame {
-    return this.games.find(g => g.id === id);
-  }
-
-  getRandom(min: number = 1, max: number = this.getGamesMockData().length): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  addPurchasedGame(purchasedGame: IGame): void {
-    this.currUser.purchasedGames.push(purchasedGame);
-    console.log(usersMockData);
-  }
-
-  gameAvailability(game: IGame): boolean {
-    if (this.currUser) {
-      for (let i = 0; i < this.currUser.purchasedGames.length; i++) {
-        if (this.currUser.purchasedGames[i].id === game.id) {
-          return true;
-        }
-      }
-    }
-
-  }
-
-  getCurrentUsersGames(): IGame[] {
-      return this.currUser.purchasedGames;
-  }
-
-  registerNewUser(newUser: IUser): void {
-    usersMockData.push(newUser);
-    console.log(usersMockData);
-  }
-
-  getNextID(): string {
-    return (+usersMockData[usersMockData.length - 1].id + 1).toString();
-  }
-
-  login(user: IUser): void {
-    for (let i = 0; i < usersMockData.length; i++) {
-      if (usersMockData[i].email === user.email && usersMockData[i].password === user.password) {
-        this.userIsAuthorized = true;
-        this.currUser = usersMockData[i];
-        console.log('вошлиииииииииии');
-        this.currUserGames = this.getCurrentUsersGames();
-        return;
-      }
-    }
-  }
-
-  logout(): void {
-    this.userIsAuthorized = false;
-    this.currUser = null;
-    console.log('вышлииии');
-    this.router.navigate(['/login']);
-  }
-
-  isAuthenticated(): boolean {
-    console.log('запросили аутентификацию есть??');
-    return this.userIsAuthorized;
-}
 
   toggleInstallButton(game: IGame) {
     this.loading = true;
     setTimeout(() => {
+      this.store.dispatch(new InstallGame(game));
       this.loading = false;
-      this.getGameByID(game.id).isInstall = !this.getGameByID(game.id).isInstall;
-    }, 5000);
+    }, 1234);
   }
+
+  login(singInUser: IUser): void {
+    this.store.pipe(select(selectUserList)).subscribe((users) => {
+      users.forEach((user) => {
+        if (user.email === singInUser.email && user.password === singInUser.password) {
+          this.store.dispatch(new GetUser(user.id));
+        }
+      });
+    });
+  }
+
+  logout(): void {
+    this.store.dispatch(new DelSelectedUser());
+  }
+
+  getUsers(): Observable<UserHttp> {
+    return this.http.get<UserHttp>(this.usersUrl);
+  }
+
+  getGames(): Observable<GameHttp> {
+    return this.http.get<GameHttp>(this.gamesUrl);
+  }
+
+
 }

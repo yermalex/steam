@@ -1,18 +1,59 @@
 .game {
+  padding: 1rem;
+  border: #ccc 1px solid;
+  border-radius: 5px;
+  margin: 0.7rem 0;
   display: flex;
   .left {}
   .icon {
     height: 100px;
     width: 100px;
   }
-  .oldPrice{
-    text-decoration: line-through;
-    color: red;
+}
+
+.isFound {
+  background-color: lightgreen;
+  border-color: seagreen;
+}
+
+.card {
+  .icon {
+    height: 100px;
+    width: 100px;
   }
 }
 
+.zvezda {
+  display: inline-block;
+  width:1em;
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:100%;
+  line-height: 1;
+  //color:#ddd;
+  //text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+  //color: #f70;
+  //text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+  color: gold;
+  text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
 
+.oldPrice{
+  text-decoration: line-through;
+  color: red;
+}
+.gameAvailability {
+  background-color: green;
+}
 
+.install {
+  background-color: darkred;
+}
+
+.notInstall {
+  background-color: seagreen;
+}
 
 
 

@@ -11,13 +11,13 @@ import {HomeComponent} from './views/home/home.component';
 import {AuthLoginGuard} from './services/guards/authLogin.guard';
 import {PageNotFound} from './services/guards/pnf.guard';
 
-import { UsersComponent } from './containers/users/users.component';
-import { UserComponent } from './containers/user/user.component';
+// import { UsersComponent } from './containers/users/users.component';
+// import { UserComponent } from './containers/user/user.component';
 
 
 const routes: Routes = [
-  { path: 'users', component: UsersComponent },
-  { path: 'user/:id', component: UserComponent },
+  // { path: 'users', component: UsersComponent },
+  // { path: 'user/:id', component: UserComponent },
 
   {path: '', component: HomeComponent},
   {path: 'shop', component: ShopComponent, canActivateChild: [AuthGuard, PageNotFound], children: [

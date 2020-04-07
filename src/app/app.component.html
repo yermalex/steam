@@ -1,38 +1,16 @@
-<!--<nav class="navbar d-flex">-->
-<!--  <a class="navbar-brand"-->
-<!--     routerLink="/">-->
-<!--    Angular - NGRX / {{ (config$ | async)?.adminName }}-->
-<!--  </a>-->
-<!--  <div class="d-flex justify-content-end">-->
-<!--    <ul class="d-flex navbar-nav flex-row align-items-center">-->
-<!--      <li class="nav-item">-->
-<!--        <a routerLink="/users"-->
-<!--           routerLinkActive="active">Users</a>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</nav>-->
-<!--<div class="container app-container">-->
-<!--  <router-outlet></router-outlet>-->
-<!--</div>-->
-
-
-
-
-
 <app-downloading></app-downloading>
 
 <nav class="navbar">
   <h1 routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-    <a [routerLink]="['/']">Steam <span *ngIf="steamService.currUser">({{steamService.currUser.nickname}})</span></a>
+    <a [routerLink]="['/']">Steam <span *ngIf="(user$ | async)">({{(user$ | async).nickname}})</span></a>
   </h1>
   <ul>
     <li routerLinkActive="active"><a [routerLink]="['/shop']">Магазин</a></li>
 
     <li routerLinkActive="active"><a [routerLink]="['/library']">Библиотека</a></li>
 
-    <li routerLinkActive="active" *ngIf="steamService.isAuthenticated()"><a (click)="steamService.logout()">Выйти</a></li>
-    <li routerLinkActive="active" *ngIf="!steamService.isAuthenticated()"><a [routerLink]="['/login']">Войти</a></li>
+    <li routerLinkActive="active" *ngIf="(userIsAuthenticated$ | async)"><a [routerLink]="['/login']" (click)="steamService.logout()">Выйти</a></li>
+    <li routerLinkActive="active" *ngIf="!(userIsAuthenticated$ | async)"><a [routerLink]="['/login']">Войти</a></li>
   </ul>
 </nav>
 

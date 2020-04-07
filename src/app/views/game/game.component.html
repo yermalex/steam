@@ -1,45 +1,59 @@
 <router-outlet></router-outlet> <!--форма покупки -->
 
-<!--<app-downloading *ngIf="steamService.loading"></app-downloading>-->
 
 <div class="game">
   <div class="left">
-    <img class="icon" src="https://cloclo10.cloud.mail.ru/inline/1.png?etag=79B59883DB81A848CB81A5EC295EC813ACC8C367&x-email=yermakov.alex%40mail.ru"
+    <img class="icon"
+         src="https://cloclo10.cloud.mail.ru/inline/1.png?etag=79B59883DB81A848CB81A5EC295EC813ACC8C367&x-email=yermakov.alex%40mail.ru"
          alt="game-icon"
     >
-    <button class="btn" [routerLink]="['/game', game.id, 'buy-form', game.id]"
-            *ngIf="!steamService.gameAvailability(game)"
+
+    <button class="btn" [routerLink]="['/game', (game$ | async).id, 'buy-form', (game$ | async).id]"
+            *ngIf="!steamService.gameAvailability((game$|async).id)"
     >
       Купить
     </button>
+
     <button class="btn"
-            [ngClass]="{'gameAvailability' : steamService.gameAvailability(game)}"
-            *ngIf="steamService.gameAvailability(game) && this.route.snapshot.url[0].path === 'shop'"
+            [ngClass]="{'gameAvailability' : steamService.gameAvailability((game$|async).id)}"
+            *ngIf="steamService.gameAvailability((game$|async).id) && this.route.snapshot.url[0].path === 'shop'"
     >
       ✔
     </button>
+
     <button class="btn"
-            *ngIf="steamService.gameAvailability(game) && (this.route.snapshot.url[0].path === 'library' || this.route.snapshot.url[0].path === 'game')"
+            [ngClass]="{'install' : (game$ | async).isInstall, 'notInstall' : !(game$ | async).isInstall}"
+            (click)="steamService.toggleInstallButton(game)"
+            *ngIf="steamService.gameAvailability((game$|async).id) && (this.route.snapshot.url[0].path === 'library' || this.route.snapshot.url[0].path === 'game')"
     >
-      <span (click)="steamService.toggleInstallButton(game)">{{game.isInstall?"Удалить":"Установить"}}</span>
+      <span>{{(game$ | async).isInstall?"Удалить":"Установить"}}</span>
     </button>
 
+<!--    <button class="btn" (click)="steamService.goBack()">-->
+<!--      Назад-->
+<!--    </button>-->
   </div>
 
   <div class="right">
-    <p class="header">{{game.title}} {{game.rating}}*</p>
-    <p>Жанр: {{game.genre}}</p>
+    <p class="header">
+      {{(game$ | async).title}}
+      <span class="zvezda" *ngIf="(game$ | async).rating >= 0.5">★</span>
+      <span class="zvezda" *ngIf="(game$ | async).rating >= 1.5">★</span>
+      <span class="zvezda" *ngIf="(game$ | async).rating >= 2.5">★</span>
+      <span class="zvezda" *ngIf="(game$ | async).rating >= 3.5">★</span>
+      <span class="zvezda" *ngIf="(game$ | async).rating >= 4.5">★</span>
+    </p>
+    <p>Жанр: {{(game$ | async).genre}}</p>
     <p>Цена:
-      <span [ngClass]="{'oldPrice' : this.game.id === steamService.gameIdWithDiscount}">
-        {{game.price | currency:'symbol':'₽' : '.0'}}
+      <span [ngClass]="{'oldPrice' : (game$ | async).id === (GameIdWithDiscount$ | async)}">
+        {{(game$ | async).price | currency:'symbol':'₽' : '.0'}}
       </span>
-      <span *ngIf="this.game.id === steamService.gameIdWithDiscount">
-        {{steamService.newPrice | currency:'symbol':'₽' : '.0'}}
+      <span *ngIf="(game$ | async).id === (GameIdWithDiscount$ | async)">
+        {{NewPriceWithDiscount$ | async | currency:'symbol':'₽' : '.0'}}
       </span>
     </p>
-    <p class="desc">Описание: {{game.description}}</p>
+    <p class="desc">Описание: {{(game$ | async).description}}</p>
   </div>
 
 </div>
 
-<button class="btn" (click)="steamService.goBack()">Назад</button>

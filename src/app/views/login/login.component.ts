@@ -3,7 +3,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {IUser} from '../../store/models/user';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {SteamService} from '../../services/steam.service';
-import {genreEnum} from '../../data/gamesMockData';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../store/state/app.state';
+import {AddUser, GetUser, GetUsers} from '../../store/actions/user.actions';
+import {selectGameList} from '../../store/selectors/game.selector';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +24,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private steamService: SteamService,
               private router: Router,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private store: Store<AppState>
   ) { }
 
   ngOnInit() {
@@ -49,12 +53,12 @@ export class LoginComponent implements OnInit {
     }
     this.submitted = true;
 
-    const user: IUser = {
+    const singInUser: IUser = {
       email: this.singInForm.value.singInEmail,
       password: this.singInForm.value.singInPassword
     };
 
-    this.steamService.login(user);
+    this.steamService.login(singInUser);
     this.singInForm.reset();
     this.router.navigate(['/library']);
     this.submitted = false;
@@ -67,17 +71,21 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
 
     const newUser: IUser = {
-      id: this.steamService.getNextID(),
+      id: null,
       nickname: this.singUpForm.value.singUpNickname,
       email: this.singUpForm.value.singUpEmail,
       password: this.singUpForm.value.singUpPassword,
       purchasedGames: []
     };
-    this.steamService.registerNewUser(newUser);
+    this.store.pipe(select(selectGameList)).subscribe((games) => newUser.id = games.length.toString());
+
+    this.store.dispatch(new AddUser(newUser));
     this.steamService.login(newUser);
     this.singUpForm.reset();
     this.router.navigate(['/library']);
     this.submitted = false;
   }
+
+
 
 }

@@ -1,4 +1,14 @@
-import {genreEnum} from '../../data/gamesMockData';
+export enum genreEnum {
+  Action = 'Экшен',
+  Shooter = 'Шутер',
+  Puzzle = 'Головоломка',
+  RPG = 'РПГ',
+  Strategy = 'Стратегия',
+  Indi = 'Инди',
+  singlePlayer = 'Одиночная игра',
+  multiPlayer = 'Мультиплеер',
+  MMO = 'ММО'
+}
 
 export interface IGame {
   id: string;

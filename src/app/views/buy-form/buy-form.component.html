@@ -84,11 +84,10 @@
       <h3>Срок действия карты</h3>
 
       <div class="form-control">
-        <label for="cardExpirationMonth">Месяц</label>
-        <select id="cardExpirationMonth"
-                formControlName="cardExpirationMonth"
+        <select formControlName="cardExpirationMonth"
                 class="form-control__input"
         >
+          <option value disabled selected>Месяц</option>
           <option value="1">01</option>
           <option value="2">02</option>
           <option value="3">03</option>
@@ -111,11 +110,10 @@
       </div>
 
       <div class="form-control">
-        <label for="cardExpirationYear">Год</label>
-        <select id="cardExpirationYear"
-                formControlName="cardExpirationYear"
+        <select formControlName="cardExpirationYear"
                 class="form-control__input"
         >
+          <option value disabled selected>Год</option>
           <option value="2020">2020</option>
           <option value="2021">2021</option>
           <option value="2022">2022</option>

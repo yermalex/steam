@@ -1,12 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MyValidators } from './my.validators';
 import {SteamService} from '../../services/steam.service';
-import {IUser} from '../../store/models/user';
 import {IGame} from '../../store/models/game';
 import {ActivatedRoute, Params} from '@angular/router';
-import {AngularFireDatabase} from '@angular/fire/database';
-import {Observable} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store/state/app.state';
+import {BuyGame} from '../../store/actions/user.actions';
 
 @Component({
   selector: 'app-buy-form',
@@ -16,12 +16,10 @@ import {Observable} from 'rxjs';
 export class BuyFormComponent implements OnInit {
 
   buyForm: FormGroup;
-  game: IGame;
-
-  items: any[];
 
   constructor(private route: ActivatedRoute,
-              private steamService: SteamService
+              private steamService: SteamService,
+              private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -43,10 +41,8 @@ export class BuyFormComponent implements OnInit {
       const formData = {...this.buyForm.value};
 
       this.route.params.subscribe((params: Params) => {
-        this.game = this.steamService.getGameByID(params.id);
+        this.store.dispatch(new BuyGame(params.id));
       });
-
-      this.steamService.addPurchasedGame(this.game);
 
       this.steamService.goBack();
     }

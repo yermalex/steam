@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {SteamService} from '../../services/steam.service';
-import {genreEnum} from '../../data/gamesMockData';
 import {ActivatedRoute, Params} from '@angular/router';
+import {genreEnum} from '../../store/models/game';
+import {select, Store} from '@ngrx/store';
+import {selectSelectedUserGameList, selectSelectedUserGameListByGenre} from '../../store/selectors/user.selector';
+import {AppState} from '../../store/state/app.state';
+
 
 @Component({
   selector: 'app-library',
@@ -10,10 +14,15 @@ import {ActivatedRoute, Params} from '@angular/router';
 })
 export class LibraryComponent implements OnInit {
 
+  games$ = this.store.pipe(select(selectSelectedUserGameList));
+
+  genreForLibFilter = 'Жанр';
+
   readonly genre: typeof genreEnum = genreEnum;
 
   constructor(private steamService: SteamService,
-              private  route: ActivatedRoute) {
+              private  route: ActivatedRoute,
+              private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -21,13 +30,21 @@ export class LibraryComponent implements OnInit {
 
     this.route.queryParams.subscribe((params: Params) => {
       if (params.filtrationBy) {
-        this.steamService.genreForLibFilter = params.filtrationBy;
-        this.steamService.filterByLibGenre();
+        this.genreForLibFilter = params.filtrationBy;
+        this.filterByLibGenre();
       }
       if (params.searchBy) {
         this.steamService.titleForLibSearch = params.searchBy;
       }
     });
+  }
+
+  filterByLibGenre(): void {
+    if (this.genreForLibFilter === 'Жанр') {
+      this.games$ = this.store.pipe(select(selectSelectedUserGameList));
+    } else {
+      this.games$ = this.store.pipe(select(selectSelectedUserGameListByGenre, {gameGenre: this.genreForLibFilter}));
+    }
   }
 
 }

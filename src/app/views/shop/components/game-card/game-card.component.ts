@@ -2,6 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {IGame} from '../../../../store/models/game';
 import {SteamService} from '../../../../services/steam.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {select, Store} from '@ngrx/store';
+import {selectGameIdWithDiscount, selectNewPriceWithDiscount} from '../../../../store/selectors/game.selector';
+import {AppState} from '../../../../store/state/app.state';
 
 @Component({
     selector: 'app-game-card',
@@ -10,19 +13,21 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class GameCardComponent implements OnInit {
 
-    @Input() game: IGame;
+  @Input() game: IGame;
 
-    @Input() hasDiscount: boolean;
+  GameIdWithDiscount$ = this.store.pipe(select(selectGameIdWithDiscount));
+  NewPriceWithDiscount$ = this.store.pipe(select(selectNewPriceWithDiscount));
 
-    constructor(private steamService: SteamService,
-                private  route: ActivatedRoute,
-                private router: Router) {
-    }
+  constructor(private steamService: SteamService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private store: Store<AppState>) {
+  }
 
-    ngOnInit() {
-    }
+  ngOnInit() {
+  }
 
-    func(e: Event) {
-      e.stopPropagation();
-    }
+  func(e: Event) {
+    e.stopPropagation();
+  }
 }

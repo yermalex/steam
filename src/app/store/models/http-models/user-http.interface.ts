@@ -1,5 +1,5 @@
-import { User } from '../user.interface';
+import {IUser} from '../user';
 
 export interface UserHttp {
-  users: User[];
+  users: IUser[];
 }
