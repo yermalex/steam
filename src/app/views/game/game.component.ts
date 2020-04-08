@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {SteamService} from '../../services/steam.service';
 import {IGame} from '../../store/models/game';
 import {select, Store} from '@ngrx/store';

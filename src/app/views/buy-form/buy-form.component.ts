@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MyValidators } from './my.validators';
 import {SteamService} from '../../services/steam.service';
-import {IGame} from '../../store/models/game';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';

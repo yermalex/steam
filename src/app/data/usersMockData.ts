@@ -1,5 +1,4 @@
 import {IUser} from '../store/models/user';
-import {IGame} from '../store/models/game';
 import {gamesMockData} from './gamesMockData';
 
 export const usersMockData: IUser[] = [

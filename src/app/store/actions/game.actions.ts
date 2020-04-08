@@ -1,7 +1,5 @@
 import {Action} from '@ngrx/store';
-import {IUser} from '../models/user';
 import {IGame} from '../models/game';
-import {EUserActions} from './user.actions';
 
 
 export enum EGameActions {

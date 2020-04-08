@@ -26,7 +26,7 @@
               *ngIf="steamService.gameAvailability(game.id) && (this.route.snapshot.url[0].path === 'library' || this.route.snapshot.url[0].path === 'game')"
               (click)="func($event); steamService.toggleInstallButton(game)"
 
-      ><!--              [disabled]="steamService.loading"-->
+      >
         <span>{{game.isInstall? "Удалить":"Установить"}}</span>
       </button>
 
@@ -51,6 +51,6 @@
           {{NewPriceWithDiscount$ | async | currency:'symbol':'₽' : '.0'}}
         </span>
       </p>
-      <p class="desc">Описание: {{game.description.substr(0, 130).concat("...")}}</p>
+      <p class="desc">Описание: {{game.description.substr(0, 150).concat("...")}}</p>
     </div>
 </div>

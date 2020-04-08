@@ -1,13 +1,11 @@
-import {ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanActivateChild, Params, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Params, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {SteamService} from '../steam.service';
-import {IGame} from '../../store/models/game';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';
-import {selectGame, selectGameList} from '../../store/selectors/game.selector';
-import {map} from 'rxjs/operators';
-import {selectSelectedUser, selectSelectedUserGameList} from '../../store/selectors/user.selector';
+import {selectGameList} from '../../store/selectors/game.selector';
+
 
 @Injectable({providedIn: 'root'})
 export class PageNotFound implements CanActivate, CanActivateChild {

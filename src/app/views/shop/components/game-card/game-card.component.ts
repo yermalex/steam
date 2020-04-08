@@ -11,7 +11,7 @@ import {AppState} from '../../../../store/state/app.state';
     templateUrl: './game-card.component.html',
     styleUrls: ['./game-card.component.less']
 })
-export class GameCardComponent implements OnInit {
+export class GameCardComponent {
 
   @Input() game: IGame;
 
@@ -22,9 +22,6 @@ export class GameCardComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private store: Store<AppState>) {
-  }
-
-  ngOnInit() {
   }
 
   func(e: Event) {

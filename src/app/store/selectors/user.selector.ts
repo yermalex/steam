@@ -1,7 +1,7 @@
 import {AppState} from '../state/app.state';
 import {createSelector} from '@ngrx/store';
 import {UserState} from '../state/user.state';
-import {GameState} from '../state/game.state';
+
 
 const selectUsers = (state: AppState) => state.users;
 

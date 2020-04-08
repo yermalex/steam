@@ -5,7 +5,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {SteamService} from '../../services/steam.service';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';
-import {AddUser, GetUser, GetUsers} from '../../store/actions/user.actions';
+import {AddUser} from '../../store/actions/user.actions';
 import {selectGameList} from '../../store/selectors/game.selector';
 
 @Component({
@@ -15,10 +15,10 @@ import {selectGameList} from '../../store/selectors/game.selector';
 })
 export class LoginComponent implements OnInit {
 
-  isSingIn = true;
+  isSignIn = true;
 
-  singInForm: FormGroup;
-  singUpForm: FormGroup;
+  signInForm: FormGroup;
+  signUpForm: FormGroup;
   submitted = false;
   message: string;
 
@@ -35,12 +35,12 @@ export class LoginComponent implements OnInit {
       }
     });
 
-    this.singInForm = new FormGroup({
+    this.signInForm = new FormGroup({
       singInEmail: new FormControl(null, [Validators.required, Validators.email]),
       singInPassword: new FormControl(null, [Validators.required, Validators.minLength(6)])
     });
 
-    this.singUpForm = new FormGroup({
+    this.signUpForm = new FormGroup({
       singUpNickname: new FormControl(null, [Validators.required, Validators.pattern('^([A-Z,a-z,0-9]{1,})$')]),
       singUpEmail: new FormControl(null, [Validators.required, Validators.email]),
       singUpPassword: new FormControl(null, [Validators.required, Validators.minLength(6)])
@@ -48,40 +48,40 @@ export class LoginComponent implements OnInit {
   }
 
   singInSubmit() {
-    if (this.singInForm.invalid) {
+    if (this.signInForm.invalid) {
       return;
     }
     this.submitted = true;
 
     const singInUser: IUser = {
-      email: this.singInForm.value.singInEmail,
-      password: this.singInForm.value.singInPassword
+      email: this.signInForm.value.singInEmail,
+      password: this.signInForm.value.singInPassword
     };
 
     this.steamService.login(singInUser);
-    this.singInForm.reset();
+    this.signInForm.reset();
     this.router.navigate(['/library']);
     this.submitted = false;
   }
 
   singUpSubmit() {
-    if (this.singUpForm.invalid) {
+    if (this.signUpForm.invalid) {
       return;
     }
     this.submitted = true;
 
     const newUser: IUser = {
       id: null,
-      nickname: this.singUpForm.value.singUpNickname,
-      email: this.singUpForm.value.singUpEmail,
-      password: this.singUpForm.value.singUpPassword,
+      nickname: this.signUpForm.value.singUpNickname,
+      email: this.signUpForm.value.singUpEmail,
+      password: this.signUpForm.value.singUpPassword,
       purchasedGames: []
     };
     this.store.pipe(select(selectGameList)).subscribe((games) => newUser.id = games.length.toString());
 
     this.store.dispatch(new AddUser(newUser));
     this.steamService.login(newUser);
-    this.singUpForm.reset();
+    this.signUpForm.reset();
     this.router.navigate(['/library']);
     this.submitted = false;
   }

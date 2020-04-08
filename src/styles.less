@@ -4,6 +4,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -33,6 +34,9 @@ img {
   width: 100%;
 }
 
+button {
+  outline:none;
+}
 .btn {
   display: inline-block;
   background: #333333;
@@ -74,29 +78,12 @@ img {
     margin-bottom: .5rem;
   }
 
-  input {
-    margin-bottom: 0;
-  }
 
   .validation {
     color: red;
   }
 }
 
-.card {
-  padding: 1rem;
-  border: #ccc 1px dotted;
-  margin: 0.7rem 0;
-
-  //p {
-  //  display: flex;
-  //  justify-content: space-between;
-  //
-  //  span.completed {
-  //    text-decoration: line-through;
-  //  }
-  //}
-}
 
 a {
   text-decoration: none;
@@ -108,10 +95,9 @@ select,
 textarea {
   display: block;
   width: 100%;
-  padding: 0.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;
-  margin-bottom: 1rem;
+  outline:none;
 }
 
 hr {
@@ -138,6 +124,7 @@ hr {
 
   ul {
     display: flex;
+    list-style: none;
 
     li.active a {
       font-weight: bold;

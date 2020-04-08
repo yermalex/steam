@@ -1,22 +1,22 @@
-<!--<app-downloading *ngIf="steamService.loading"></app-downloading>-->
-<div class="filtration">
-  <label class="filtration__text" for="filtration">ФИЛЬТРАЦИЯ</label>
-  <select class="filtration__input" id="filtration" size="1" [(ngModel)]="genreForLibFilter" (ngModelChange)="filterByLibGenre()"
-          [routerLink]="['/library']" [queryParams]="{filtrationBy: genreForLibFilter}"
-  >
-    <option selected>Жанр</option>
-    <option value="{{item.value}}" *ngFor="let item  of genre | keyvalue;">{{item.value}}</option>
-  </select>
-</div>
+<div class="tools">
+  <div class="filtration">
+    <label class="filtration__text" for="filtration">ФИЛЬТРАЦИЯ</label>
+    <select class="filtration__input" id="filtration" size="1" [(ngModel)]="genreForLibFilter" (ngModelChange)="filterByLibGenre()"
+            [routerLink]="['/library']" [queryParams]="{filtrationBy: genreForLibFilter}"
+    >
+      <option selected>Жанр</option>
+      <option value="{{item.value}}" *ngFor="let item  of genre | keyvalue;">{{item.value}}</option>
+    </select>
+  </div>
 
-<div class="search">
-  <label class="search__text" for="search">ПОИСК</label>
-  <input class="search__input" id="search" type="text" placeholder="по названию" [(ngModel)]="steamService.titleForLibSearch"
-         [routerLink]="['/library']" [queryParams]="{searchBy: steamService.titleForLibSearch}"
-  >
+  <div class="search">
+    <label class="search__text" for="search">ПОИСК</label>
+    <input class="search__input" id="search" type="text" placeholder="по названию" [(ngModel)]="steamService.titleForLibSearch"
+           [routerLink]="['/library']" [queryParams]="{searchBy: steamService.titleForLibSearch}"
+    >
+  </div>
 </div>
-
-<div class="games" *ngIf="(games$ | async).length; else notFoundMess;">
+<div class="games" *ngIf="(games$ | async).length;">
   <ng-container *ngFor="let game of games$ | async">
     <app-game-card [game]="game"
                    [routerLink]="['/game', game.id]"
@@ -24,5 +24,7 @@
     </app-game-card>
   </ng-container>
 </div>
-<ng-template #notFoundMess> Не найдено!</ng-template>
 
+<div class="games" *ngIf="!(games$ | async).length;">
+  <div class="notFound">Не найдено!</div>
+</div>

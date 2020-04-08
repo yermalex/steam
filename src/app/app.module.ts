@@ -1,14 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-
-// import { UserService } from './services/user.service';
-// import { UsersComponent as UsersContainerComponent } from './containers/users/users.component';
-// import { UsersComponent } from './components/users/users.component';
-// import { UserComponent } from './containers/user/user.component';
-// import { UserDetailsComponent } from './components/user-details/user-details.component';
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ShopComponent } from './views/shop/shop.component';
@@ -30,7 +21,7 @@ import { StoreModule } from '@ngrx/store';
 import {appReducer} from './store/reducers/app.reducer';
 import {UserEffects} from './store/effects/user.effects';
 import {GameEffects} from './store/effects/game.effects';
-// import {ConfigEffects} from './store/effects/config.effects';
+
 
 @NgModule({
   declarations: [
@@ -43,13 +34,7 @@ import {GameEffects} from './store/effects/game.effects';
     BuyFormComponent,
     ErrorPageComponent,
     HomeComponent,
-    GameCardComponent,
-
-
-    // UsersContainerComponent,
-    // UsersComponent,
-    // UserComponent,
-    // UserDetailsComponent
+    GameCardComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +44,6 @@ import {GameEffects} from './store/effects/game.effects';
     HttpClientModule,
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([UserEffects, GameEffects]),
-    // StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     StoreRouterConnectingModule.forRoot(),
     environment.production ? [] : StoreDevtoolsModule.instrument()
   ],

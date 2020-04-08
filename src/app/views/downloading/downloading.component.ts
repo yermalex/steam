@@ -6,11 +6,8 @@ import {SteamService} from '../../services/steam.service';
   templateUrl: './downloading.component.html',
   styleUrls: ['./downloading.component.less']
 })
-export class DownloadingComponent implements OnInit {
+export class DownloadingComponent {
 
   constructor(private steamService: SteamService) { }
-
-  ngOnInit() {
-  }
 
 }

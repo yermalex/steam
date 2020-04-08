@@ -14,6 +14,3 @@ export const initialAppState: AppState = {
   games: initialGameState
 };
 
-// export function getInitialState(): AppState {
-//   return initialAppState;
-// }

@@ -9,5 +9,4 @@ export const appReducer: ActionReducerMap<AppState, any> = {
   router: routerReducer,
   users: userReducer,
   games: gameReducer,
-  // config: configReducer
 };
